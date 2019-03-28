@@ -5,7 +5,7 @@
  
 ; 以下は標準的なFAT12フォーマットフロッピーディスクのための記述
 
-  JMP  ebtry
+  JMP  entry
   DB   0x90
   DB  "HELLOIPL"  ; ブートセクタの名前を自由に書いてよい（8バイト）
   DW  512         ; 1セクタの大きさ（512にしなければならない）
@@ -31,7 +31,7 @@
 entry:
   MOV AX,0        ; レジスタ初期化
   MOV SS,AX
-  MOV AP,0x7c00
+  MOV SP,0x7c00
   MOV DS,AX
   MOV ES,AX
 
