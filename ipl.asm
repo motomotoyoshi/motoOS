@@ -1,6 +1,8 @@
 ; moto-ipl
 ; TAB=2
 
+  CYLS EQU 10
+
   ORG  0x7c00      ; このプログラムがどこに読み込まれるのか
  
 ; 以下は標準的なFAT12フォーマットフロッピーディスクのための記述
@@ -60,12 +62,18 @@ retry:
 next:
   MOV AX,ES       ; アドレスを0x200進める(512を16で割った値の16進数)
   ADD AX,0x0020
-  MOV ES,AX       ; ASS ES,0x020という命令がないのでこうした
+  MOV ES,AX       ; ADD ES,0x020という命令がないのでこうした
   ADD CL,1        ; CLに1を足す
   CMP CL,18       ; CLと18を比較
-  JBE readloop    ; CL <= 18 だったらreadroopへ
-
-
+  JBE readloop    ; CL <= 18 だったらreadloopへ
+  MOV CL,1
+  ADD DH,1
+  CMP DH,2
+  JB  readloop    ; DH < 2 だったらreadloopへ
+  MOV DH,0
+  ADD CH,1
+  CMP CH,CYLS
+  JB  readloop    ; CH < CYLS だったらreadloopへ
 
 fin:
   HLT             ; 何かあるまでCPUを停止させる
