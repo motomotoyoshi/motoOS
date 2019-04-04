@@ -100,6 +100,6 @@ msg:
   DB  0x0a        ; 改行
   DB  0
 
-  RESB 0x7dfe-0x7c00-($-$$)
+  RESB 0x1fe-($-$$)
 
   DB  0x55, 0xaa
