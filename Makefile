@@ -9,18 +9,24 @@ ipl10.bin : ipl10.asm
 asmhead.bin : asmhead.asm
 	nasm asmhead.asm -o asmhead.bin -l asmhead.lst
 
-nasmfuncelf.o : nasmfunc.asm
-	nasm -f elf nasmfunc.asm -o nasmfuncelf.o
+nasmfunc.o : nasmfunc.asm
+	nasm -f elf32 -o nasmfunc.o nasmfunc.asm 
 
-bootpack.hrb : bootpack.o hrb.ld nasmfuncelf.o
-	gcc -c -m32 -fno-pic -nostdlib -T hrb.ld bootpack.c nasmfuncelf.o  -o bootpack.hrb
+bootpack.o : bootpack.c
+	gcc -c -m32 -fno-pic -o bootpack.o bootpack.c
 
-haribote.oys : asmhead.bin bootpack.hrb
-	cat asmhead.bin bootpack.hrb > haribote.oys
+bootpack.hrb: bootpack.o nasmfunc.o
+	ld -m elf_i386 -e HariMain -o bootpack.hrb -Thrb.ld bootpack.o nasmfunc.o
 
-$(OS).img : ipl10.bin haribote.oys
-	mformat -f 1440 -B ipl10.bin -C -i $(OS).img ::
-	mcopy haribote.oys -n -i $(OS).img ::  
+#bootpack.hrb : bootpack.c nasmfunc.o
+#	gcc -march=i386 -m32 -nostdlib -T hrb.ld -g bootpack.c -o bootpack.hrb
+
+haribote.sys : asmhead.bin bootpack.hrb
+	cat asmhead.bin bootpack.hrb > haribote.sys
+
+$(OS).img : ipl10.bin haribote.sys
+	mformat -f 1440 -C -B ipl10.bin -i $(OS).img ::
+	mcopy haribote.sys -n -i $(OS).img ::  
 
 img : 
 	make $(OS).img
@@ -29,4 +35,4 @@ run :
 	qemu-system-i386 -fda $(OS).img
 
 clean :
-	rm *.bin *.lst *.hrb *.oys *.img *.o
+	rm *.bin *.lst *.hrb *.sys *.img *.o
