@@ -18,9 +18,6 @@ bootpack.o : bootpack.c
 bootpack.hrb: bootpack.o nasmfunc.o
 	ld -m elf_i386 -e HariMain -o bootpack.hrb -Thrb.ld bootpack.o nasmfunc.o
 
-#bootpack.hrb : bootpack.c nasmfunc.o
-#	gcc -march=i386 -m32 -nostdlib -T hrb.ld -g bootpack.c -o bootpack.hrb
-
 haribote.sys : asmhead.bin bootpack.hrb
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
@@ -35,4 +32,4 @@ run :
 	qemu-system-i386 -fda $(OS).img
 
 clean :
-	rm *.bin *.lst *.hrb *.sys *.img *.o
+	rm *.bin *.lst *.hrb *.sys *.img *.o *.img

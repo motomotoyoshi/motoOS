@@ -1,10 +1,15 @@
 /*extern*/ 
 void io_hlt(void);
+void write_mem8(int addr, int data);
 
 void HariMain(void)
 {
+  int i; /* 変数宣言 iという変数は32ビットの整数型} */
+  for(i = 0xa0000; i <= 0xaffff; i++) {
+    write_mem8(i, 15); /* MOV BYTE [i],15 */
+    }
 
-fin:
-    io_hlt();  /* これでnasmfunc.asmの_io_hltが実行される */
-    goto fin;
+  for(;;){
+    io_hlt();
+    }
 }
