@@ -23,7 +23,7 @@ haribote.sys : asmhead.bin bootpack.hrb
 
 $(OS).img : ipl10.bin haribote.sys
 	mformat -f 1440 -C -B ipl10.bin -i $(OS).img ::
-	mcopy haribote.sys -n -i $(OS).img ::  
+	mcopy haribote.sys -i $(OS).img ::  
 
 img : 
 	make $(OS).img
