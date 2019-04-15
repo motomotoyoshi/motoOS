@@ -12,11 +12,14 @@ asmhead.bin : asmhead.asm
 nasmfunc.o : nasmfunc.asm
 	nasm -f elf32 -o nasmfunc.o nasmfunc.asm 
 
+hankaku.o : hankaku.c
+	gcc -c -m32 -o hankaku.o hankaku.c
+
 bootpack.o : bootpack.c
 	gcc -c -m32 -fno-pic -o bootpack.o bootpack.c
 
-bootpack.hrb: bootpack.o nasmfunc.o
-	ld -m elf_i386 -e HariMain -o bootpack.hrb -Thrb.ld bootpack.o nasmfunc.o
+bootpack.hrb: bootpack.o nasmfunc.o hankaku.o
+	ld -m elf_i386 -e HariMain -o bootpack.hrb -Thrb.ld bootpack.o nasmfunc.o hankaku.o
 
 haribote.sys : asmhead.bin bootpack.hrb
 	cat asmhead.bin bootpack.hrb > haribote.sys
@@ -32,4 +35,4 @@ run :
 	qemu-system-i386 -fda $(OS).img
 
 clean :
-	rm *.bin *.lst *.hrb *.sys *.img *.o *.img
+	rm *.bin *.lst *.hrb *.sys *.img *.o
