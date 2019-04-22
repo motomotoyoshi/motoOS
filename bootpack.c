@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 void io_hlt(void);
 void io_cli(void);
 void io_out8(int port, int data);
@@ -9,7 +11,9 @@ void set_palette(int start, int end, unsigned char *rgb);
 void boxfill8(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1);
 void init_screen(char *vram, int x, int y);
 void putfont8(char *vram, int xsize, int x, int y, char c, char *font);
-void putfont8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s);
+void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s);
+
+extern void mysprintf(char *str, char *fmt, ...);
 
 #define COL8_000000   0
 #define COL8_FF0000   1
@@ -37,13 +41,16 @@ struct BOOTINFO {
 void HariMain(void)
 {
   struct BOOTINFO *binfo = (struct BOOTINFO *) 0x0ff0;
+  char s[40];
 
   init_palette();
   init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
-  putfont8_asc(binfo->vram, binfo->scrnx,  8,  8, COL8_FFFFFF, "ABC 123");
-  putfont8_asc(binfo->vram, binfo->scrnx, 31, 31, COL8_000000, "Haribote OS.");
-  putfont8_asc(binfo->vram, binfo->scrnx, 30, 30, COL8_FFFFFF, "Haribote.OS.");
+  putfonts8_asc(binfo->vram, binfo->scrnx,  8,  8, COL8_FFFFFF, "ABC 123");
+  putfonts8_asc(binfo->vram, binfo->scrnx, 31, 31, COL8_000000, "Haribote OS.");
+  putfonts8_asc(binfo->vram, binfo->scrnx, 30, 30, COL8_FFFFFF, "Haribote OS.");
 
+  mysprintf(s, "scrnx = %d", binfo->scrnx);
+  putfonts8_asc(binfo->vram, binfo->scrnx, 16, 64, COL8_FFFFFF, s);
   for(;;){
     io_hlt();
   }
@@ -141,7 +148,7 @@ void putfont8(char *vram, int xsize, int x, int y, char c, char *font)
   return;  
 }
 
-void putfont8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s)
+void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s)
 {
   extern char hankaku[4096];
   for(; *s != 0x00; s++){
