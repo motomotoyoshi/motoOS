@@ -16,14 +16,13 @@ hankaku.o : hankaku.c
 	gcc -c -m32 -o hankaku.o hankaku.c
 
 bootpack.o : bootpack.c
-	gcc -c -march=i486 -m32 -nostdlib -fno-builtin -fno-pic -o bootpack.o bootpack.c
+	gcc -c -march=i486 -m32 -nostdlib -fno-pic -o bootpack.o bootpack.c
 
 mysprintf.o : mysprintf.c
 	gcc -c -march=i486 -m32 -nostdlib -fno-builtin -fno-pic -o mysprintf.o mysprintf.c 
 
 bootpack.hrb: bootpack.o nasmfunc.o hankaku.o mysprintf.o
 	ld -m elf_i386 -e HariMain -o bootpack.hrb -T hrb.ld bootpack.o nasmfunc.o hankaku.o mysprintf.o 
-
 haribote.sys : asmhead.bin bootpack.hrb
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
