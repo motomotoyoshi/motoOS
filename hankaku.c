@@ -1,3 +1,4 @@
+//https://vanya.jp.net/os/hankaku.c
 #define X )*2+1
 #define _ )*2
 #define s ((((((((0
