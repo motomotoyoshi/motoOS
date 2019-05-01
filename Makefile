@@ -1,40 +1,31 @@
 OS=haribote
+OBJS_BOOTPACK = bootpack.o nasmfunc.o hankaku.o mysprintf.o graphic.o dsctbl.o
+GCC = gcc -c -march=i486 -m32 -nostdlib -fno-pic
 
 default:
 	make img
 
-ipl10.bin : ipl10.asm 
-	nasm ipl10.asm -o ipl10.bin -l ipl10.lst
-
-asmhead.bin : asmhead.asm
-	nasm asmhead.asm -o asmhead.bin -l asmhead.lst
+%.bin : %.asm
+	nasm $< -o $@ -l $*.lst
 
 nasmfunc.o : nasmfunc.asm
-	nasm -f elf32 -o nasmfunc.o nasmfunc.asm 
-
-hankaku.o : hankaku.c
-	gcc -c -m32 -o hankaku.o hankaku.c
-
-bootpack.o : bootpack.c
-	gcc -c -march=i486 -m32 -nostdlib -fno-pic -o bootpack.o bootpack.c
+	nasm -f elf32 -o $@ $<
 
 mysprintf.o : mysprintf.c
-	gcc -c -march=i486 -m32 -nostdlib -fno-builtin -fno-pic -o mysprintf.o mysprintf.c 
+	$(GCC) -fno-builtin -o $@ $< 
 
-graphic.o : graphic.c
-	gcc -c -march=i486 -m32 -nostdlib -fno-pic -o graphic.o graphic.c
+%.o : %.c
+	$(GCC) -o $@ $<
 
-dsctbl.o : dsctbl.c
-	gcc -c -march=i486 -m32 -nostdlib -fno-pic -o dsctbl.o dsctbl.c
+bootpack.hrb: $(OBJS_BOOTPACK)
+	ld -m elf_i386 -e HariMain -o $@ -T hrb.ld $^
 
-bootpack.hrb: bootpack.o nasmfunc.o hankaku.o mysprintf.o graphic.o dsctbl.o
-	ld -m elf_i386 -e HariMain -o bootpack.hrb -T hrb.ld bootpack.o nasmfunc.o hankaku.o mysprintf.o graphic.o dsctbl.o
 haribote.sys : asmhead.bin bootpack.hrb
-	cat asmhead.bin bootpack.hrb > haribote.sys
+	cat $^ > $@
 
-$(OS).img : ipl10.bin haribote.sys
-	mformat -f 1440 -C -B ipl10.bin -i $(OS).img ::
-	mcopy haribote.sys -i $(OS).img ::  
+$(OS).img : ipl10.bin $(OS).sys
+	mformat -f 1440 -C -B $< -i $@ ::
+	mcopy $(OS).sys -i $@ ::  
 
 img : 
 	make $(OS).img
@@ -44,3 +35,4 @@ run :
 
 clean :
 	rm *.bin *.lst *.hrb *.sys *.img *.o
+
