@@ -22,6 +22,9 @@ extern int io_load_eflags(void);
 extern void io_store_eflags(int eflags);
 extern void load_gdtr(int limit, int addr);
 extern void load_idtr(int limit, int addr);
+extern void asm_inthandler21(void);
+extern void asm_inthandler27(void);
+extern void asm_inthandler2c(void);
 
 /* graphic.c */
 extern void init_palette(void);
@@ -56,7 +59,6 @@ struct SEGMENT_DESCRIPTOR {
   char base_mid, access_right;
   char limit_high, base_high;
 };
-
 struct GATE_DESCRIPTOR {
   short offset_low, selector;
   char dw_count, access_right;
@@ -73,20 +75,24 @@ extern void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, i
 #define LIMIT_BOTPAK 0x0007ffff
 #define AR_DATA32_RW 0x4092
 #define AR_CODE32_ER 0x409a
+#define AR_INTGATE32 0x008e
 
 /* int.c */
 extern void init_pic(void);
-#define PIC0_ICW1   0X0020
-#define PIC0_OCW2   0X0020
-#define PIC0_IMR    0X0021
-#define PIC0_ICW2   0X0021
-#define PIC0_ICW3   0X0021
-#define PIC0_ICW4   0X0021
-#define PIC1_ICW1   0X00a0
-#define PIC1_OCW2   0X00a0
-#define PIC1_IMR    0X00a1
-#define PIC1_ICW2   0X00a1
-#define PIC1_ICW3   0X00a1
-#define PIC1_ICW4   0X00a1
+extern void inthandler21(int *esp);
+extern void inthandler27(int *esp);
+extern void inthandler2c(int *esp);
+#define PIC0_ICW1   0x0020
+#define PIC0_OCW2   0x0020
+#define PIC0_IMR    0x0021
+#define PIC0_ICW2   0x0021
+#define PIC0_ICW3   0x0021
+#define PIC0_ICW4   0x0021
+#define PIC1_ICW1   0x00a0
+#define PIC1_OCW2   0x00a0
+#define PIC1_IMR    0x00a1
+#define PIC1_ICW2   0x00a1
+#define PIC1_ICW3   0x00a1
+#define PIC1_ICW4   0x00a1
 
 #endif
