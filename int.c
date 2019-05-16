@@ -23,7 +23,11 @@ void init_pic(void){
 
 void inthandler21(int *esp){
   struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-  boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 -1, 15);
+<<<<<<< HEAD
+  boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
+=======
+  boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
+>>>>>>> af8a37e7d7096fa4359a72b1763aac0e4fd9defc
   putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 21 (IRQ-1) : PS/2 keyboard");
   for(;;){
     io_hlt();
@@ -32,8 +36,13 @@ void inthandler21(int *esp){
 
 void inthandler2c(int *esp){
   struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-  boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 -1, 15);
+<<<<<<< HEAD
+  boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
   putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 2c (IRQ-12) : PS/2 mouse");
+=======
+  boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
+  putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 2C (IRQ-12) : PS/2 mouse");
+>>>>>>> af8a37e7d7096fa4359a72b1763aac0e4fd9defc
   for(;;){
     io_hlt();
   }

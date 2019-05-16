@@ -92,11 +92,19 @@ asm_inthandler21:
   PUSH  ES
   PUSH  DS
   PUSHAD
+<<<<<<< HEAD
   MOV   EAX,ESP
   PUSH  EAX
   MOV   AX,SS
   MOV   DS,AX
   MOV   ES,AX
+=======
+  MOV   EAX, ESP
+  PUSH  EAX
+  MOV   AX, SS
+  MOV   DS, AX
+  MOV   ES, AX
+>>>>>>> af8a37e7d7096fa4359a72b1763aac0e4fd9defc
   CALL  inthandler21
   POP   EAX
   POPAD
@@ -108,11 +116,19 @@ asm_inthandler27:
   PUSH  ES
   PUSH  DS
   PUSHAD
+<<<<<<< HEAD
   MOV   EAX,ESP
   PUSH  EAX
   MOV   AX,SS
   MOV   DS,AX
   MOV   ES,AX
+=======
+  MOV   EAX, ESP
+  PUSH  EAX
+  MOV   AX, SS
+  MOV   DS, AX
+  MOV   ES, AX
+>>>>>>> af8a37e7d7096fa4359a72b1763aac0e4fd9defc
   CALL  inthandler27
   POP   EAX
   POPAD
@@ -124,11 +140,19 @@ asm_inthandler2c:
   PUSH  ES
   PUSH  DS
   PUSHAD
+<<<<<<< HEAD
   MOV   EAX,ESP
   PUSH  EAX
   MOV   AX,SS
   MOV   DS,AX
   MOV   ES,AX
+=======
+  MOV   EAX, ESP
+  PUSH  EAX
+  MOV   AX, SS
+  MOV   DS, AX
+  MOV   ES, AX
+>>>>>>> af8a37e7d7096fa4359a72b1763aac0e4fd9defc
   CALL  inthandler2c
   POP   EAX
   POPAD
