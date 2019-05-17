@@ -1,5 +1,4 @@
 #include "bootpack.h"
-extern void mysprintf(char *str, char *fmt, ...);
 
 // PICの初期化
 void init_pic(void){
@@ -24,16 +23,16 @@ void init_pic(void){
 
 #define PORT_KEYDAT 0x0060
 
+struct KEYBUF keybuf;
+
 void inthandler21(int *esp){
-  struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-  unsigned char data, s[4];
+  unsigned char data;
   io_out8(PIC0_OCW2, 0x61);
   data = io_in8(PORT_KEYDAT);
-
-  mysprintf(s, "%x", data);
-  boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 16, 15, 31);
-  putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
-
+  if (keybuf.flag == 0){
+    keybuf.data = data;
+    keybuf.flag = 1;
+  }
   return;
 }
 

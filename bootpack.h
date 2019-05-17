@@ -13,10 +13,11 @@ struct BOOTINFO { /* 0x0ff0-0xfff */
 };
 #define ADR_BOOTINFO  0x00000ff0
 
-/* naskfunc.nas */
+/* nasmfunc.nas */
 extern void io_hlt(void);
 extern void io_cli(void);
 extern void io_sti(void);
+extern void io_stihlt(void);
 extern int  io_in8(int port);
 extern void io_out8(int port, int data);
 extern int io_load_eflags(void);
@@ -79,6 +80,9 @@ extern void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, i
 #define AR_INTGATE32 0x008e
 
 /* int.c */
+struct KEYBUF {
+  unsigned char data, flag;
+};
 extern void init_pic(void);
 extern void inthandler21(int *esp);
 extern void inthandler27(int *esp);
