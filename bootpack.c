@@ -2,18 +2,19 @@
 #include <stdio.h>
 
 extern void mysprintf(char *str, char *fmt, ...);
-extern struct KEYBUF keybuf;
+extern struct FIFO8 keyfifo;
 
 void HariMain(void)
 {
   struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-  char s[40], mcursor[256];
+  char s[40], mcursor[256], keybuf[32];
   int mx, my, i, j;
 
   init_gdtidt();
   init_pic();
   io_sti();
 
+  fifo8_init(&keyfifo, 32, keybuf);
   io_out8(PIC0_IMR, 0xf9);
   io_out8(PIC1_IMR, 0xef);
 
@@ -28,14 +29,10 @@ void HariMain(void)
 
   for(;;){
     io_cli();
-    if (keybuf.next == 0){
+    if (fifo8_status(&keyfifo) == 0){
       io_stihlt();
     } else {
-      i = keybuf.data[0];
-      keybuf.next--;
-      for(j = 0; j < keybuf.next; j++){
-        keybuf.data[j] = keybuf.data[j + 1];
-      }
+      i = fifo8_get(&keyfifo);
       io_sti();
       mysprintf(s, "%x", i);
       boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 16, 15, 31);

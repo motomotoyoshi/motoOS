@@ -28,6 +28,16 @@ extern void asm_inthandler21(void);
 extern void asm_inthandler27(void);
 extern void asm_inthandler2c(void);
 
+/* fifo.c */
+struct FIFO8{
+  unsigned char *buf;
+  int p, q, size, free, flags;
+};
+extern void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf);
+extern int fifo8_put(struct FIFO8 *fifo, unsigned char data);
+extern int fifo8_get(struct FIFO8 *fifo);
+extern int fifo8_status(struct FIFO8 *fifo);
+
 /* graphic.c */
 extern void init_palette(void);
 extern void set_palette(int start, int end, unsigned char *rgb);
@@ -82,7 +92,7 @@ extern void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, i
 /* int.c */
 struct KEYBUF {
   unsigned char data[32];
-  int next;
+  int next_r, next_w, len;
 };
 extern void init_pic(void);
 extern void inthandler21(int *esp);
