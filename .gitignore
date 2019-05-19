@@ -1,1 +1,2 @@
 *.log, *.o, *.hrb, *.lst, *.bin
+*2.c
