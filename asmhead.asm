@@ -31,10 +31,10 @@ VRAM  EQU 0x0ff8    ; グラフィックバッファの開始番地
       INT 0x16      ; keyboard BIOS
       MOV [LEDS],AL
 
-;
-;
-;
-;
+; PICが一切の割り込みを受け付けないようにする
+;   AT互換機の仕様ではPICの初期化をするなら
+;   これをCLI前にやらないとハングアップすることがある
+;   PICの初期化はあとでやる
 
     MOV AL,0xff
     OUT 0x21,AL
@@ -43,7 +43,7 @@ VRAM  EQU 0x0ff8    ; グラフィックバッファの開始番地
 
     CLI
 
-;
+; CPUから1MB以上のメモリにアクセスできるようにA20GATEを設定
 
     CALL waitkbdout
     MOV  AL,0xd1
@@ -53,7 +53,7 @@ VRAM  EQU 0x0ff8    ; グラフィックバッファの開始番地
     OUT  0x60,AL
     CALL waitkbdout
 
-;
+; プロテクトモード移行
 
 ;[INSTRSET "i486p"]
 
@@ -71,7 +71,7 @@ pipelineflush:
     MOV  GS,AX
     MOV  SS,AX
     
-;
+; bootpackの転送
 
     MOV  ESI,bootpack
     MOV  EDI,BOTPAK
@@ -80,7 +80,7 @@ pipelineflush:
 
 ;
 
-;
+; ブートセクタ
 
     MOV  ESI,0x7c00
     MOV  EDI,DSKCAC
@@ -100,7 +100,7 @@ pipelineflush:
 ;
 ;
 
-;
+; bootpackの起動
 
     MOV  EBX,BOTPAK
     MOV  ECX,[EBX+16]

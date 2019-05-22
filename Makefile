@@ -1,5 +1,5 @@
 OS=haribote
-OBJS_BOOTPACK = bootpack.o nasmfunc.o hankaku.o mysprintf.o graphic.o dsctbl.o int.o fifo.o
+OBJS_BOOTPACK = bootpack.o nasmfunc.o hankaku.o mysprintf.o graphic.o dsctbl.o int.o fifo.o keyboard.o mouse.o
 GCC = gcc -c -march=i486 -m32 -nostdlib -fno-pic
 
 default:
